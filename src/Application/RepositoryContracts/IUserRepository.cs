@@ -4,9 +4,9 @@ namespace Application.RepositoryContracts;
 
 public interface IUserRepository
 {
-    Task<ICollection<User>> GetAllRoles();
-    Task<User> GetRoleById(long userId);
-    Task<long> AddRole(User user);
-    Task UpdateRole(User user);
-    Task DeleteRole(User user);
+    Task<ICollection<User>> GetAllUsers();
+    Task<User> GetUserById(long userId);
+    Task<long> AddUser(User user);
+    Task UpdateUser(User user);
+    Task DeleteUser(User user);
 }

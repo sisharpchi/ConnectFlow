@@ -5,27 +5,27 @@ namespace Infrastructure.Persistence.Repositories;
 
 public class UserRepository : IUserRepository
 {
-    public Task<long> AddRole(User user)
+    public Task<long> AddUser(User user)
     {
         throw new NotImplementedException();
     }
 
-    public Task DeleteRole(User user)
+    public Task DeleteUser(User user)
     {
         throw new NotImplementedException();
     }
 
-    public Task<ICollection<User>> GetAllRoles()
+    public Task<ICollection<User>> GetAllUsers()
     {
         throw new NotImplementedException();
     }
 
-    public Task<User> GetRoleById(long userId)
+    public Task<User> GetUserById(long userId)
     {
         throw new NotImplementedException();
     }
 
-    public Task UpdateRole(User user)
+    public Task UpdateUser(User user)
     {
         throw new NotImplementedException();
     }
