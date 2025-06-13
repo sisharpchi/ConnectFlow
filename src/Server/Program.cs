@@ -1,4 +1,6 @@
 
+using Server.Configurations;
+
 namespace Server
 {
     public class Program
@@ -13,6 +15,8 @@ namespace Server
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.ConfigureDatabase();
 
             var app = builder.Build();
 

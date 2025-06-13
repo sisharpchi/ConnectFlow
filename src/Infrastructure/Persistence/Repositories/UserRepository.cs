@@ -1,32 +1,54 @@
 using Application.RepositoryContracts;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence.Repositories;
 
 public class UserRepository : IUserRepository
 {
-    public Task<long> AddRole(User user)
+    private readonly AppDbContext appDbContext;
+
+    public UserRepository(AppDbContext appDbContext)
     {
-        throw new NotImplementedException();
+        this.appDbContext = appDbContext;
     }
 
-    public Task DeleteRole(User user)
+    public async Task<long> AddUserAsync(User user)
     {
-        throw new NotImplementedException();
+        await appDbContext.Users.AddAsync(user);
+        await appDbContext.SaveChangesAsync();
+        return user.Id;
     }
 
-    public Task<ICollection<User>> GetAllRoles()
+    public async Task DeleteUserAsync(User user)
     {
-        throw new NotImplementedException();
+        if (user is null)
+        {
+            throw new Exception("not found user");
+        }
+
+        appDbContext.Users.Remove(user);
+        await appDbContext.SaveChangesAsync();
     }
 
-    public Task<User> GetRoleById(long userId)
+    public async Task<ICollection<User>> GetAllUsersAsync()
     {
-        throw new NotImplementedException();
+        return await appDbContext.Users.ToListAsync();
     }
 
-    public Task UpdateRole(User user)
+    public async Task<User> GetUserByIdAsync(long userId)
     {
-        throw new NotImplementedException();
+       var result = await appDbContext.Users.FirstOrDefaultAsync(b => b.Id == userId);
+       if(result is null)
+        {
+            throw new Exception("not found userId");
+        }
+        return result;
+    }
+
+    public async Task UpdateUserAsync(User user)
+    {
+        appDbContext.Users.Update(user);
+        await appDbContext.SaveChangesAsync();
     }
 }

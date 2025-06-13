@@ -1,32 +1,54 @@
 using Application.RepositoryContracts;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence.Repositories;
 
 public class ContactRepository : IContactRepository
 {
-    public Task<long> AddContact(Contact contact)
+    private readonly AppDbContext appDbContext;
+
+    public ContactRepository(AppDbContext appDbContext)
     {
-        throw new NotImplementedException();
+        this.appDbContext = appDbContext;
     }
 
-    public Task DeleteContact(Contact contact)
+    public async Task<long> AddContactAsync(Contact contact)
     {
-        throw new NotImplementedException();
+        await appDbContext.Contacts.AddAsync(contact);
+        await appDbContext.SaveChangesAsync();
+        return contact.Id;
     }
 
-    public Task<ICollection<Contact>> GetAllContacts()
+    public async Task DeleteContactAsync(Contact contact)
     {
-        throw new NotImplementedException();
+        if (contact is null)
+        {
+            throw new Exception("not found user");
+        }
+
+        appDbContext.Contacts.Remove(contact);
+        await appDbContext.SaveChangesAsync();
     }
 
-    public Task<Role> GetContactById(long contactId)
+    public async Task<ICollection<Contact>> GetAllContactsAsync()
     {
-        throw new NotImplementedException();
+        return await appDbContext.Contacts.ToListAsync();
     }
 
-    public Task UpdateContact(Contact contact)
+    public async Task<Contact> GetContactByIdAsync(long contactId)
     {
-        throw new NotImplementedException();
+        var result = await appDbContext.Contacts.FirstOrDefaultAsync(b => b.Id == contactId);
+        if (result is null)
+        {
+            throw new Exception("not found contactId");
+        }
+        return result;
+    }
+
+    public async Task UpdateContactAsync(Contact contact)
+    {
+        appDbContext.Contacts.Update(contact);
+        await appDbContext.SaveChangesAsync();
     }
 }

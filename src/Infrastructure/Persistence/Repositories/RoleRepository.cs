@@ -1,32 +1,50 @@
 using Application.RepositoryContracts;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence.Repositories;
 
 public class RoleRepository : IRoleRepository
 {
-    public Task<long> AddRole(Role role)
+    private readonly AppDbContext appDbContext;
+
+    public RoleRepository(AppDbContext appDbContext)
     {
-        throw new NotImplementedException();
+        this.appDbContext = appDbContext;
     }
 
-    public Task DeleteRole(Role role)
+    public async Task<long> AddRoleAsync(Role role)
     {
-        throw new NotImplementedException();
+        await appDbContext.Roles.AddAsync(role);
+        await appDbContext.SaveChangesAsync();
+        return role.Id;
     }
 
-    public Task<ICollection<Role>> GetAllRoles()
+    public async Task DeleteRoleAsync(Role role)
     {
-        throw new NotImplementedException();
+        if(role is null)
+        {
+            throw new Exception("not found role");
+        }
+        appDbContext.Roles.Remove(role);
+        await appDbContext.SaveChangesAsync();
     }
 
-    public Task<Role> GetRoleById(long roleId)
+    public async Task<ICollection<Role>> GetAllRolesAsync()
     {
-        throw new NotImplementedException();
+        return await appDbContext.Roles.ToListAsync();
     }
 
-    public Task UpdateRole(Role role)
+    public async Task<Role> GetRoleByIdAsync(long roleId)
     {
-        throw new NotImplementedException();
+        var result = await appDbContext.Roles.FirstOrDefaultAsync(b => b.Id == roleId);
+        if (result is null) throw new Exception("not found roleId");
+        return result;
+    }
+
+    public async Task UpdateRoleAsync(Role role)
+    {
+        appDbContext.Roles.Update(role);
+        await appDbContext.SaveChangesAsync();
     }
 }
