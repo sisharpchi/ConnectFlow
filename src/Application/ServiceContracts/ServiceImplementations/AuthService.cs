@@ -12,7 +12,7 @@ public class AuthService(IUserRepository userRepository, IRoleRepository roleRep
     private readonly IRoleRepository _roleRepository = roleRepository;
     public async Task<LoginResponseDto> LoginAsync(LoginModel model)
     {
-        User? user = (await _userRepository.GetAllUsers()).Where(user => user.UserName == model.UserName).FirstOrDefault();
+        User? user = (await _userRepository.GetAllUsersAsync()).Where(user => user.UserName == model.UserName).FirstOrDefault();
 
         if (user is null)
         {
@@ -83,9 +83,9 @@ public class AuthService(IUserRepository userRepository, IRoleRepository roleRep
             UserName = model.UserName,
         };
 
-        newUser.RoleId = (await _roleRepository.GetAllRoles()).Select(role => role.Id).FirstOrDefault();
+        newUser.RoleId = (await _roleRepository.GetAllRolesAsync()).Select(role => role.Id).FirstOrDefault();
         newUser.Password = new PasswordHasher<User>().HashPassword(newUser, model.Password);
-        long userId = await _userRepository.AddUser(newUser);
+        long userId = await _userRepository.AddUserAsync(newUser);
         return userId;
     }
 }

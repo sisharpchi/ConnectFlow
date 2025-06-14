@@ -31,15 +31,16 @@ public class UserRepository : IUserRepository
         await appDbContext.SaveChangesAsync();
     }
 
-    public async Task<ICollection<User>> GetAllUsersAsync()
+    public async Task<IQueryable<User>> GetAllUsersAsync()
     {
-        return await appDbContext.Users.ToListAsync();
+        return await Task.FromResult(appDbContext.Users.AsQueryable());
     }
+
 
     public async Task<User> GetUserByIdAsync(long userId)
     {
-       var result = await appDbContext.Users.FirstOrDefaultAsync(b => b.Id == userId);
-       if(result is null)
+        var result = await appDbContext.Users.FirstOrDefaultAsync(b => b.Id == userId);
+        if (result is null)
         {
             throw new Exception("not found userId");
         }
