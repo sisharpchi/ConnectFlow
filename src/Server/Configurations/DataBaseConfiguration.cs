@@ -1,4 +1,4 @@
-﻿using Infrastructure.Persistence;
+using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace Server.Configurations;

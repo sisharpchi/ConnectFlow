@@ -2,7 +2,7 @@ using Application.Dtos;
 using Application.RepositoryContracts;
 using Domain.Entities;
 
-namespace Application.ServiceContracts;
+namespace Application.ServiceContracts.ServiceImplementations;
 
 public class RoleService(IRoleRepository roleRepository) : IRoleService
 {
