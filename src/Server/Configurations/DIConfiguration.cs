@@ -17,5 +17,6 @@ public static class DIConfiguration
         builder.Services.AddScoped<IContactRepository, ContactRepository>();
         builder.Services.AddScoped<IAuthService, AuthService>();
         builder.Services.AddScoped<IValidator<RegisterModel>, RegisterModelValidator>();
+        builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
     }
 }
