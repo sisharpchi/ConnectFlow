@@ -4,10 +4,11 @@ namespace Application.RepositoryContracts;
 
 public interface IRoleRepository
 {
-    Task<ICollection<Role>> GetAllRolesAsync();
-    Task<Role> GetRoleByIdAsync(long roleId);
-    Task<long> AddRoleAsync(Role role);
-    Task UpdateRoleAsync(Role role);
-    Task DeleteRoleAsync(Role role);
-
+    Task<ICollection<Role>> SelectAllRolesAsync();
+    Task<ICollection<User>> SelectAllUsersByRoleNameAsync(string roleName);
+    Task<Role> SelectUserRoleByRoleName(string userRoleName);
+    Task<long> InsertUserRoleAsync(Role userRole);
+    Task<Role> SelectUserRoleByIdAsync(long userRoleId);
+    Task DeleteUserRoleAsync(Role userRole);
+    Task UpdateUserRoleAsync(Role userRole);
 }

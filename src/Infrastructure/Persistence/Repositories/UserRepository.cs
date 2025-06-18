@@ -4,52 +4,30 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence.Repositories;
 
-public class UserRepository : IUserRepository
+public class UserRepository(AppDbContext appDbContext) : IUserRepository
 {
-    private readonly AppDbContext appDbContext;
-
-    public UserRepository(AppDbContext appDbContext)
+    public Task DeleteUserById(long userId)
     {
-        this.appDbContext = appDbContext;
+        throw new NotImplementedException();
     }
 
-    public async Task<long> AddUserAsync(User user)
+    public Task<long> InsertUserAsync(User user)
     {
-        await appDbContext.Users.AddAsync(user);
-        await appDbContext.SaveChangesAsync();
-        return user.Id;
+        throw new NotImplementedException();
     }
 
-    public async Task DeleteUserAsync(User user)
+    public Task<User> SelectUserByIdAsync(long userId)
     {
-        if (user is null)
-        {
-            throw new Exception("not found user");
-        }
-
-        appDbContext.Users.Remove(user);
-        await appDbContext.SaveChangesAsync();
+        throw new NotImplementedException();
     }
 
-    public async Task<IQueryable<User>> GetAllUsersAsync()
+    public Task<User> SelectUserByUserNameAsync(string userName)
     {
-        return await Task.FromResult(appDbContext.Users.AsQueryable());
+        throw new NotImplementedException();
     }
 
-
-    public async Task<User> GetUserByIdAsync(long userId)
+    public Task UpdateUserRoleAsync(long userId, long userRoleId)
     {
-        var result = await appDbContext.Users.FirstOrDefaultAsync(b => b.Id == userId);
-        if (result is null)
-        {
-            throw new Exception("not found userId");
-        }
-        return result;
-    }
-
-    public async Task UpdateUserAsync(User user)
-    {
-        appDbContext.Users.Update(user);
-        await appDbContext.SaveChangesAsync();
+        throw new NotImplementedException();
     }
 }

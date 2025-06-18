@@ -1,6 +1,10 @@
+using Application.Dtos;
+
 namespace Application.ServiceContracts;
 
 public interface IUserService
 {
-    Task<long> ChangeRole(long roleId, string newRole);
+    Task DeleteUserByUserIdAsync(long userId, string userRoleName);
+    Task UpdateUserRoleAsync(long userId, long userRoleId, string userRoleName);
+    Task<UserGetDto> GetUserByUserIdAsync(long userId);
 }

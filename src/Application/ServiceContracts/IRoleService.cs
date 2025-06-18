@@ -5,9 +5,9 @@ namespace Application.ServiceContracts;
 
 public interface IRoleService
 {
-    Task<ICollection<RoleDto>> GetAllRoles();
-    Task<Role> GetRoleById(long roleId);
-    Task<long> CreateRole(CreateRoleDto createRoleDto);
-    Task<long> UpdateRole(long roleId,UpdateRoleDto updateRoleDto);
-    Task<long> DeleteRole(long roleId);
+    Task<ICollection<UserRoleDto>> GetAllRolesAsync();
+    Task<ICollection<UserGetDto>> GetAllUsersByRoleNameAsync(string roleName);
+    Task<long> AddUserRoleAsync(UserRoleCreateDto userRoleCreateDto, string userRoleName);
+    Task DeleteUserRoleByIdAsync(long userRoleId, string userRoleName);
+    Task UpdateUserRoleAsync(UserRoleDto userRoleDto);
 }

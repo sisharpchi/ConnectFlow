@@ -1,50 +1,42 @@
 using Application.RepositoryContracts;
 using Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence.Repositories;
 
-public class RoleRepository : IRoleRepository
+public class RoleRepository(AppDbContext appDbContext) : IRoleRepository
 {
-    private readonly AppDbContext appDbContext;
-
-    public RoleRepository(AppDbContext appDbContext)
+    public Task DeleteUserRoleAsync(Role userRole)
     {
-        this.appDbContext = appDbContext;
+        throw new NotImplementedException();
     }
 
-    public async Task<long> AddRoleAsync(Role role)
+    public Task<long> InsertUserRoleAsync(Role userRole)
     {
-        await appDbContext.Roles.AddAsync(role);
-        await appDbContext.SaveChangesAsync();
-        return role.Id;
+        throw new NotImplementedException();
     }
 
-    public async Task DeleteRoleAsync(Role role)
+    public Task<ICollection<Role>> SelectAllRolesAsync()
     {
-        if(role is null)
-        {
-            throw new Exception("not found role");
-        }
-        appDbContext.Roles.Remove(role);
-        await appDbContext.SaveChangesAsync();
+        throw new NotImplementedException();
     }
 
-    public async Task<ICollection<Role>> GetAllRolesAsync()
+    public Task<ICollection<User>> SelectAllUsersByRoleNameAsync(string roleName)
     {
-        return await appDbContext.Roles.ToListAsync();
+        throw new NotImplementedException();
     }
 
-    public async Task<Role> GetRoleByIdAsync(long roleId)
+    public Task<Role> SelectUserRoleByIdAsync(long userRoleId)
     {
-        var result = await appDbContext.Roles.FirstOrDefaultAsync(b => b.Id == roleId);
-        if (result is null) throw new Exception("not found roleId");
-        return result;
+        throw new NotImplementedException();
     }
 
-    public async Task UpdateRoleAsync(Role role)
+    public Task<Role> SelectUserRoleByRoleName(string userRoleName)
     {
-        appDbContext.Roles.Update(role);
-        await appDbContext.SaveChangesAsync();
+        throw new NotImplementedException();
+    }
+
+    public Task UpdateUserRoleAsync(Role userRole)
+    {
+        throw new NotImplementedException();
     }
 }

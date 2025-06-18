@@ -1,12 +1,11 @@
 using Application.Dtos;
-using Application.Dtos.Auth;
 
 namespace Application.ServiceContracts;
 
 public interface IAuthService
 {
-    Task<long> RegisterAsync(RegisterModel model);
-    Task<LoginResponseDto> LoginAsync(LoginModel model);
+    Task<long> SignUpUserAsync(UserCreateDto userCreateDto);
+    Task<LogInResponseDto> LoginUserAsync(UserLogInDto userLogInDto);
+    Task<LogInResponseDto> RefreshTokenAsync(RefreshRequestDto request);
     Task LogOutAsync(string token);
-    Task<LoginResponseDto> RefreshTokenAsync(RefreshRequestDto request);
 }

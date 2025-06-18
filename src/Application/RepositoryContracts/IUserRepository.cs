@@ -4,10 +4,9 @@ namespace Application.RepositoryContracts;
 
 public interface IUserRepository
 {
-    Task<IQueryable<User>> GetAllUsersAsync();
-    Task<User> GetUserByIdAsync(long userId);
-    Task<long> AddUserAsync(User user);
-    Task UpdateUserAsync(User user);
-    Task DeleteUserAsync(User user);
-    
+    Task<long> InsertUserAsync(User user);
+    Task<User> SelectUserByIdAsync(long userId);
+    Task<User> SelectUserByUserNameAsync(string userName);
+    Task UpdateUserRoleAsync(long userId, long userRoleId);
+    Task DeleteUserById(long userId);
 }
