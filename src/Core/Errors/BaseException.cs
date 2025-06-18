@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Runtime.Serialization;
 
-namespace Core.Errors
+namespace Core.Errors;
+
+public class BaseException : Exception
 {
-    internal class BaseException
-    {
-    }
+    public BaseException() { }
+    public BaseException(String message) : base(message) { }
+    public BaseException(String message, Exception inner) : base(message, inner) { }
+    protected BaseException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 }

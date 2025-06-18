@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Runtime.Serialization;
 
-namespace Core.Errors
+namespace Core.Errors;
+
+[Serializable]
+public class EntityNotFoundException : BaseException
 {
-    internal class EntityNotFoundException
-    {
-    }
+    public EntityNotFoundException() { }
+    public EntityNotFoundException(String message) : base(message) { }
+    public EntityNotFoundException(String message, Exception inner) : base(message, inner) { }
+    protected EntityNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 }
