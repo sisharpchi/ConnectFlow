@@ -1,42 +1,52 @@
 using Application.RepositoryContracts;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+//using Core.Errors;
 
 namespace Infrastructure.Persistence.Repositories;
 
 public class ContactRepository(AppDbContext appDbContext) : IContactRepository
 {
-    public Task<int> ContactTotalCount()
+    public async Task<int> ContactTotalCount()
     {
-        throw new NotImplementedException();
+        var totalCount = await appDbContext.Contacts.CountAsync();
+        return totalCount;
     }
 
-    public Task DeleteContactAsync(Contact contact)
+    public async Task DeleteContactAsync(Contact contact)
     {
-        throw new NotImplementedException();
+        appDbContext.Contacts.Remove(contact);
+        await appDbContext.SaveChangesAsync();
     }
 
-    public Task<long> InsertContactAsync(Contact contact)
+    public async Task<long> InsertContactAsync(Contact contact)
     {
-        throw new NotImplementedException();
+        await appDbContext.Contacts.AddAsync(contact);
+        await appDbContext.SaveChangesAsync();
+        return contact.ContactId;
     }
 
     public IQueryable<Contact> SelectAllContacts()
     {
-        throw new NotImplementedException();
+        return appDbContext.Contacts.Include(c => c.User);
     }
 
-    public Task<ICollection<Contact>> SelectAllUserContactsAsync(long userId)
+    public async Task<ICollection<Contact>> SelectAllUserContactsAsync(long userId)
     {
-        throw new NotImplementedException();
+        var contacts = await appDbContext.Contacts.Where(c => c.UserId == userId).ToListAsync();
+        return contacts;
     }
 
-    public Task<Contact> SelectContactByContactIdAsync(long contactId)
+    public async Task<Contact> SelectContactByContactIdAsync(long contactId)
     {
-        throw new NotImplementedException();
+        var contact = await appDbContext.Contacts.Include(c => c.User).FirstOrDefaultAsync(c => c.ContactId == contactId);
+        return contact == null ? throw new Exception($"Contact wiht contactId {contactId} not found") : contact;
     }
 
-    public Task UpdateContactAsync(Contact contact)
+    public async Task UpdateContactAsync(Contact contact)
     {
-        throw new NotImplementedException();
+        var contactFronDb = await SelectContactByContactIdAsync(contact.ContactId);
+        appDbContext.Contacts.Update(contactFronDb);
+        await appDbContext.SaveChangesAsync();
     }
 }
