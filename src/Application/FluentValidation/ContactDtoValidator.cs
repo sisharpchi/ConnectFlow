@@ -1,4 +1,4 @@
-﻿namespace Application.FluintValidation;
+﻿namespace Application.FluentValidation;
 
 public class ContactDtoValidator
 {
