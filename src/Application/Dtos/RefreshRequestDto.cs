@@ -1,9 +1,7 @@
 ﻿namespace Application.Dtos;
 
-public class LogInResponseDto
+public class RefreshRequestDto
 {
     public string AccessToken { get; set; }
     public string RefreshToken { get; set; }
-    public string TokenType { get; set; }
-    public int Expires { get; set; }
 }

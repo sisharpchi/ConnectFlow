@@ -1,54 +1,42 @@
 using Application.RepositoryContracts;
 using Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence.Repositories;
 
-public class ContactRepository : IContactRepository
+public class ContactRepository(AppDbContext appDbContext) : IContactRepository
 {
-    private readonly AppDbContext appDbContext;
-
-    public ContactRepository(AppDbContext appDbContext)
+    public Task<int> ContactTotalCount()
     {
-        this.appDbContext = appDbContext;
+        throw new NotImplementedException();
     }
 
-    public async Task<long> AddContactAsync(Contact contact)
+    public Task DeleteContactAsync(Contact contact)
     {
-        await appDbContext.Contacts.AddAsync(contact);
-        await appDbContext.SaveChangesAsync();
-        return contact.Id;
+        throw new NotImplementedException();
     }
 
-    public async Task DeleteContactAsync(Contact contact)
+    public Task<long> InsertContactAsync(Contact contact)
     {
-        if (contact is null)
-        {
-            throw new Exception("not found user");
-        }
-
-        appDbContext.Contacts.Remove(contact);
-        await appDbContext.SaveChangesAsync();
+        throw new NotImplementedException();
     }
 
-    public async Task<ICollection<Contact>> GetAllContactsAsync()
+    public IQueryable<Contact> SelectAllContacts()
     {
-        return await appDbContext.Contacts.ToListAsync();
+        throw new NotImplementedException();
     }
 
-    public async Task<Contact> GetContactByIdAsync(long contactId)
+    public Task<ICollection<Contact>> SelectAllUserContactsAsync(long userId)
     {
-        var result = await appDbContext.Contacts.FirstOrDefaultAsync(b => b.Id == contactId);
-        if (result is null)
-        {
-            throw new Exception("not found contactId");
-        }
-        return result;
+        throw new NotImplementedException();
     }
 
-    public async Task UpdateContactAsync(Contact contact)
+    public Task<Contact> SelectContactByContactIdAsync(long contactId)
     {
-        appDbContext.Contacts.Update(contact);
-        await appDbContext.SaveChangesAsync();
+        throw new NotImplementedException();
+    }
+
+    public Task UpdateContactAsync(Contact contact)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -1,20 +1,24 @@
 
+using Application.Dtos;
 using Application.RepositoryContracts;
 using Domain.Entities;
 
 namespace Application.ServiceContracts.ServiceImplementations;
 
-public class UserService(IRoleRepository roleRepository) : IUserService
+public class UserService(IUserRepository userRepository) : IUserService
 {
-    private readonly IRoleRepository _roleRepository = roleRepository;
-    public async Task<long> ChangeRole(long roleId, string newRole)
+    public Task DeleteUserByUserIdAsync(long userId, string userRoleName)
     {
-        Role? role = await _roleRepository.GetRoleByIdAsync(roleId);
+        throw new NotImplementedException();
+    }
 
-        if (role is null)
-            throw new Exception("Role not found");
+    public Task<UserGetDto> GetUserByUserIdAsync(long userId)
+    {
+        throw new NotImplementedException();
+    }
 
-        role.Name = newRole;
-        return role.Id;
+    public Task UpdateUserRoleAsync(long userId, long userRoleId, string userRoleName)
+    {
+        throw new NotImplementedException();
     }
 }

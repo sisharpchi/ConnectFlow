@@ -4,78 +4,30 @@ using Domain.Entities;
 
 namespace Application.ServiceContracts.ServiceImplementations;
 
-public class RoleService(IRoleRepository roleRepository) : IRoleService
+public class RoleService(IRoleRepository userRoleRepository) : IRoleService
 {
-    private readonly IRoleRepository _roleRepository = roleRepository;
-    public async Task<long> CreateRole(CreateRoleDto createRoleDto)
+    public Task<long> AddUserRoleAsync(UserRoleCreateDto userRoleCreateDto, string userRoleName)
     {
-        var newRole = new Role
-        {
-            Name = createRoleDto.Name,
-            Description = createRoleDto.Description,
-        };
-
-        long roleId = await _roleRepository.AddRoleAsync(newRole);
-        return roleId;
+        throw new NotImplementedException();
     }
 
-    public async Task<long> DeleteRole(long roleId)
+    public Task DeleteUserRoleByIdAsync(long userRoleId, string userRoleName)
     {
-        Role? role = await _roleRepository.GetRoleByIdAsync(roleId);
-        if (role is null)
-        {
-            throw new Exception("Role Not Found");
-        }
-
-        await _roleRepository.DeleteRoleAsync(role);
-
-        return roleId;
+        throw new NotImplementedException();
     }
 
-    public async Task<ICollection<RoleDto>> GetAllRoles()
+    public Task<ICollection<UserRoleDto>> GetAllRolesAsync()
     {
-        var roles = await _roleRepository.GetAllRolesAsync();
-        var roleDtos = new List<RoleDto>();
-
-        foreach (var role in roles)
-        {
-            roleDtos.Add(new RoleDto
-            {
-                Name = role.Name,
-                Description = role.Description,
-            });
-
-        }
-
-        return roleDtos;
+        throw new NotImplementedException();
     }
 
-    public async Task<Role> GetRoleById(long roleId)
+    public Task<ICollection<UserGetDto>> GetAllUsersByRoleNameAsync(string roleName)
     {
-        Role? role = await _roleRepository.GetRoleByIdAsync(roleId);
-
-        if (role is null)
-            throw new Exception("Role Not Found");
-
-        return role;
+        throw new NotImplementedException();
     }
 
-    public async Task<long> UpdateRole(long roleId, UpdateRoleDto updateRoleDto)
+    public Task UpdateUserRoleAsync(UserRoleDto userRoleDto)
     {
-        Role? role = await _roleRepository.GetRoleByIdAsync(roleId);
-
-        if (role is null)
-            throw new Exception("Role not found");
-
-
-        if (!string.IsNullOrEmpty(updateRoleDto.Name))
-            role.Name = updateRoleDto.Name;
-
-        if (!string.IsNullOrEmpty(updateRoleDto.Description))
-            role.Name = updateRoleDto.Description;
-
-
-
-        return role.Id;
+        throw new NotImplementedException();
     }
 }
