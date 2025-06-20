@@ -18,10 +18,10 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        //modelBuilder.ApplyConfiguration(new ContactConfiguration());
-        //modelBuilder.ApplyConfiguration(new RefreshTokenConfiguration());
-        //modelBuilder.ApplyConfiguration(new UserConfiguration());
-        //modelBuilder.ApplyConfiguration(new RoleConfiguration());
+        modelBuilder.ApplyConfiguration(new ContactConfiguration());
+        modelBuilder.ApplyConfiguration(new RefreshTokenConfiguration());
+        modelBuilder.ApplyConfiguration(new UserConfiguration());
+        modelBuilder.ApplyConfiguration(new RoleConfiguration());
 
         base.OnModelCreating(modelBuilder);
     }
