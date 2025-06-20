@@ -42,5 +42,24 @@ public static class AdminEndpoints
             return Results.Ok();
         })
         .WithName("UpdateUserRole");
+
+        // Barcha rollarni olish
+        userGroup.MapGet("/getRoles", [Authorize(Roles = "Admin,SuperAdmin")]
+        async (IRoleService _roleService) =>
+        {
+            var roles = await _roleService.GetAllRolesAsync();
+            return Results.Ok(roles);
+        })
+        .WithName("GetAllRoles");
+
+        //// Userni role'i bilan birga olish
+        //userGroup.MapGet("/getUserWithRole", [Authorize(Roles = "Admin,SuperAdmin")]
+        //async (long userId, IUserService _userService) =>
+        //{
+        //    var user = await _userService.GetUserWithRoleByIdAsync(userId);
+        //    return Results.Ok(user);
+        //})
+        //.WithName("GetUserWithRole");
+
     }
 }

@@ -26,6 +26,29 @@ public static class ContactEndpoints
 
         userGroup.MapPut("/update", UpdateContact)
             .WithName("UpdateContact");
+
+        // Contactni filtr bilan olish
+        //userGroup.MapGet("/filter", async (string? name, HttpContext ctx, IContactService _service) =>
+        //{
+        //    var userId = ctx.User.FindFirst("UserId")?.Value;
+        //    if (userId is null) throw new ForbiddenException("Access forbidden");
+
+        //    var filtered = await _service.FilterContactsAsync(long.Parse(userId), name);
+        //    return Results.Ok(filtered);
+        //})
+        //.WithName("FilterContacts");
+
+        //// Contactlarni pagination bilan olish
+        //userGroup.MapGet("/paged", async (int pageNumber, int pageSize, HttpContext ctx, IContactService _service) =>
+        //{
+        //    var userId = ctx.User.FindFirst("UserId")?.Value;
+        //    if (userId is null) throw new ForbiddenException("Access forbidden");
+
+        //    var result = await _service.GetPagedContactsAsync(long.Parse(userId), pageNumber, pageSize);
+        //    return Results.Ok(result);
+        //})
+        //.WithName("PagedContacts");
+
     }
 
     public static async Task<IResult> AddContact(ContactCreateDto contactCreateDto, HttpContext context, IContactService contactService)
@@ -77,4 +100,6 @@ public static class ContactEndpoints
         var res = await _service.GetAllContactstAsync(long.Parse(userId));
         return Results.Ok(res);
     }
+
+
 }
