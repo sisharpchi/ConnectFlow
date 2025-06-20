@@ -17,7 +17,7 @@ public class TokenService : ITokenService
         _config = configuration.GetSection("Jwt");
     }
 
-    public string GenerateRefreshToken()
+    public  string GenerateRefreshToken()
     {
         var randomBytes = new byte[64];
         using RandomNumberGenerator rng = RandomNumberGenerator.Create();
@@ -25,7 +25,7 @@ public class TokenService : ITokenService
         return Convert.ToBase64String(randomBytes);
     }
 
-    public string GenerateTokent(UserGetDto user)
+    public  string GenerateTokent(UserGetDto user)
     {
         var identityClaims = new Claim[]
         {
@@ -55,7 +55,7 @@ public class TokenService : ITokenService
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
-    public ClaimsPrincipal? GetPrincipalFromExpiredToken(string token)
+    public  ClaimsPrincipal? GetPrincipalFromExpiredToken(string token)
     {
         var tokenValidationParameters = new TokenValidationParameters()
         {
