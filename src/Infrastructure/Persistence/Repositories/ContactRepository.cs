@@ -1,6 +1,7 @@
 using Application.RepositoryContracts;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 //using Core.Errors;
 
 namespace Infrastructure.Persistence.Repositories;
@@ -29,6 +30,14 @@ public class ContactRepository(AppDbContext appDbContext) : IContactRepository
     public IQueryable<Contact> SelectAllContacts()
     {
         return appDbContext.Contacts.Include(c => c.User);
+    }
+
+    public async Task<int> CountAsync(Expression<Func<Contact, bool>>? predicate = null, CancellationToken cancellationToken = default)
+    {
+        if (predicate is null)
+            return await appDbContext.Contacts.CountAsync(cancellationToken);
+
+        return await appDbContext.Contacts.CountAsync(predicate, cancellationToken);
     }
 
     public async Task<ICollection<Contact>> SelectAllUserContactsAsync(long userId)

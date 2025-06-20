@@ -1,4 +1,5 @@
 using Domain.Entities;
+using System.Linq.Expressions;
 
 namespace Application.RepositoryContracts;
 
@@ -11,4 +12,6 @@ public interface IContactRepository
     Task<Contact> SelectContactByContactIdAsync(long contactId);
     Task<int> ContactTotalCount();
     IQueryable<Contact> SelectAllContacts();
+
+    Task<int> CountAsync(Expression<Func<Contact, bool>>? predicate = null, CancellationToken cancellationToken = default);
 }
