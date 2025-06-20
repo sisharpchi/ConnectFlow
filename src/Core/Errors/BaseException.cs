@@ -1,7 +1,8 @@
-﻿using System.Runtime.Serialization;
+using System.Runtime.Serialization;
 
 namespace Core.Errors;
 
+[Serializable]
 public class BaseException : Exception
 {
     public BaseException() { }

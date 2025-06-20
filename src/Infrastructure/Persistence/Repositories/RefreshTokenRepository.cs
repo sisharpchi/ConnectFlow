@@ -1,13 +1,16 @@
 using Application.RepositoryContracts;
+using Core.Errors;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence.Repositories;
 
 public class RefreshTokenRepository(AppDbContext appDbContext) : IRefreshTokenRepository
 {
-    public Task InsertRefreshTokenAsync(RefreshToken refreshToken)
+    public async Task InsertRefreshTokenAsync(RefreshToken refreshToken)
     {
-        throw new NotImplementedException();
+        await appDbContext.RefreshTokens.AddAsync(refreshToken);
+        await appDbContext.SaveChangesAsync();
     }
 
     public Task RemoveRefreshTokenAsync(string token)
@@ -15,9 +18,20 @@ public class RefreshTokenRepository(AppDbContext appDbContext) : IRefreshTokenRe
         throw new NotImplementedException();
     }
 
-    public Task<RefreshToken?> SelectActiveTokenByUserIdAsync(long userId)
+    public async Task<RefreshToken?> SelectActiveTokenByUserIdAsync(long userId)
     {
-        throw new NotImplementedException();
+        RefreshToken? refreshToke;
+        try
+        {
+            refreshToke = await appDbContext.RefreshTokens
+            .Include(rf => rf.User)
+            .SingleOrDefaultAsync(rf => rf.UserId == userId && rf.IsRevoked == false && rf.Expires > DateTime.UtcNow);
+        }
+        catch (InvalidOperationException ex)
+        {
+            throw new Exception($"2 or more active refreshToken found with userId: {userId} found!\nAnd {ex.Message}");
+        }
+        return refreshToke;
     }
 
     public Task<RefreshToken> SelectRefreshTokenAsync(string refreshToken, long userId)
