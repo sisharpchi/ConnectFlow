@@ -1,7 +1,7 @@
 ﻿using System.Runtime.Serialization;
-using ToDoList.Errors;
+using Core.Errors;
 
-namespace ToDoList.Core.Errors;
+namespace Core.Core.Errors;
 
 public class UnauthorizedException : BaseException
 {

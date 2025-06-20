@@ -1,6 +1,6 @@
 using System.Runtime.Serialization;
 
-namespace ToDoList.Errors;
+namespace Core.Errors;
 
 [Serializable]
 public class DuplicateEntryException : NotAllowedException

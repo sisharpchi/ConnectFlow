@@ -13,9 +13,13 @@ public class RefreshTokenRepository(AppDbContext appDbContext) : IRefreshTokenRe
         await appDbContext.SaveChangesAsync();
     }
 
-    public Task RemoveRefreshTokenAsync(string token)
+    public async Task RemoveRefreshTokenAsync(string token)
     {
-        throw new NotImplementedException();
+        var refreshToken = await appDbContext.RefreshTokens.FirstOrDefaultAsync(rf => rf.Token == token);
+        if (refreshToken == null) throw new EntityNotFoundException($"Refresh token: {refreshToken} not found");
+
+        appDbContext.RefreshTokens.Remove(refreshToken);
+        await appDbContext.SaveChangesAsync();
     }
 
     public async Task<RefreshToken?> SelectActiveTokenByUserIdAsync(long userId)
@@ -34,8 +38,9 @@ public class RefreshTokenRepository(AppDbContext appDbContext) : IRefreshTokenRe
         return refreshToke;
     }
 
-    public Task<RefreshToken> SelectRefreshTokenAsync(string refreshToken, long userId)
+    public async Task<RefreshToken> SelectRefreshTokenAsync(string refreshToken, long userId)
     {
-        throw new NotImplementedException();
+        var refToken = await appDbContext.RefreshTokens.FirstOrDefaultAsync(rt => rt.Token == refreshToken && rt.UserId == userId);
+        return refToken ?? throw new InvalidArgumentException($"RefreshToken with {userId} is invalid");
     }
 }
