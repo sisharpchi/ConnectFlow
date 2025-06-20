@@ -1,6 +1,8 @@
 ﻿using Application.Dtos;
+using Application.Dtos.Pagenation;
 using Application.ServiceContracts;
 using Core.Errors;
+using System.Security.Claims;
 
 namespace Server.Endpoints;
 
@@ -27,28 +29,36 @@ public static class ContactEndpoints
         userGroup.MapPut("/update", UpdateContact)
             .WithName("UpdateContact");
 
-        // Contactni filtr bilan olish
-        //userGroup.MapGet("/filter", async (string? name, HttpContext ctx, IContactService _service) =>
-        //{
-        //    var userId = ctx.User.FindFirst("UserId")?.Value;
-        //    if (userId is null) throw new ForbiddenException("Access forbidden");
+        //Contactni filtr bilan olish
+        userGroup.MapGet("/filter", async (string? name, HttpContext ctx, IContactService _service) =>
+        {
+            var userId = ctx.User.FindFirst("UserId")?.Value;
+            if (userId is null) throw new ForbiddenException("Access forbidden");
 
-        //    var filtered = await _service.FilterContactsAsync(long.Parse(userId), name);
-        //    return Results.Ok(filtered);
-        //})
-        //.WithName("FilterContacts");
+            var filtered = await _service.FilterContactsAsync(long.Parse(userId), name);
+            return Results.Ok(filtered);
+        })
+        .WithName("FilterContacts");
 
-        //// Contactlarni pagination bilan olish
-        //userGroup.MapGet("/paged", async (int pageNumber, int pageSize, HttpContext ctx, IContactService _service) =>
-        //{
-        //    var userId = ctx.User.FindFirst("UserId")?.Value;
-        //    if (userId is null) throw new ForbiddenException("Access forbidden");
+        userGroup.MapGet("/paged", async (
+            HttpContext httpContext,
+            [AsParameters] ContactQueryParams queryParams,
+            IContactService contactService,
+            CancellationToken cancellationToken) =>
+        {
+            // JWT token ichidan UserId ni olish (ClaimTypes.NameIdentifier yoki "uid")
+            string? userIdStr = httpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                                ?? httpContext.User.FindFirst("UserId")?.Value;
 
-        //    var result = await _service.GetPagedContactsAsync(long.Parse(userId), pageNumber, pageSize);
-        //    return Results.Ok(result);
-        //})
-        //.WithName("PagedContacts");
+            if (string.IsNullOrWhiteSpace(userIdStr) || !long.TryParse(userIdStr, out long userId))
+                return Results.Unauthorized();
 
+            // QueryParams ustiga JWT’dagi userId ni ustun qo‘yamiz (token ustuvor)
+            queryParams.UserId = userId;
+
+            var result = await contactService.GetAllAsync(queryParams, cancellationToken);
+            return Results.Ok(result);
+        });
     }
 
     public static async Task<IResult> AddContact(ContactCreateDto contactCreateDto, HttpContext context, IContactService contactService)

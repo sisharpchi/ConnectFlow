@@ -1,9 +1,11 @@
 ﻿using Application.Dtos;
+using Application.Dtos.Pagenation;
 using Application.FluentValidation;
 using Application.FluintValidation;
 using Application.RepositoryContracts;
 using Core.Errors;
 using Domain.Entities;
+using System.Linq;
 
 namespace Application.ServiceContracts.ServiceImplementations;
 
@@ -19,8 +21,68 @@ public class ContactService(IContactRepository contactRepository) : IContactServ
             Email = contact.Email,
             PhoneNumber = contact.PhoneNumber,
             Address = contact.Address,
+            CreatedAt = contact.CreatedAt,
         };
     }
+
+    public async Task<PagedResult<ContactDto>> GetAllAsync(ContactQueryParams queryParams, CancellationToken cancellationToken = default)
+    {
+        var query = contactRepository.SelectAllContacts();
+
+        if (!string.IsNullOrWhiteSpace(queryParams.Search))
+        {
+            var search = queryParams.Search.ToLower();
+            query = query.Where(c =>
+                c.FirstName.ToLower().Contains(search) ||
+                c.LastName.ToLower().Contains(search) ||
+                c.Email.ToLower().Contains(search));
+        }
+
+        if (queryParams.UserId.HasValue)
+        {
+            query = query.Where(c => c.UserId == queryParams.UserId);
+        }
+
+        int totalCount = await contactRepository.CountAsync();
+
+        var items = query
+            .OrderByDescending(c => c.CreatedAt)
+            .Skip((queryParams.PageNumber - 1) * queryParams.PageSize)
+            .Take(queryParams.PageSize)
+            .ToList();
+
+        var mapped = items.Select(ConvertToContactDto).ToList();
+
+        return new PagedResult<ContactDto>
+        {
+            Items = mapped,
+            PageNumber = queryParams.PageNumber,
+            PageSize = queryParams.PageSize,
+            TotalCount = totalCount
+        };
+    }
+
+    public async Task<List<ContactDto>> FilterContactsAsync(long userId, string? name)
+    {
+        var query = contactRepository.SelectAllContacts()
+            .Where(c => c.UserId == userId);
+
+        if (!string.IsNullOrWhiteSpace(name))
+        {
+            var lowered = name.ToLower();
+            query = query.Where(c =>
+                c.FirstName.ToLower().Contains(lowered) ||
+                c.LastName.ToLower().Contains(lowered) ||
+                c.FullName.ToLower().Contains(lowered));
+        }
+
+        var items = query
+            .OrderBy(c => c.FirstName)
+            .ToList();
+
+        return items.Select(ConvertToContactDto).ToList();
+    }
+
 
     public async Task<long> AddContactAsync(ContactCreateDto contactCreateDto, long userId)
     {
@@ -108,6 +170,7 @@ public class ContactService(IContactRepository contactRepository) : IContactServ
             contactOfUser.Email = contactDto.Email;
             contactOfUser.PhoneNumber = contactDto.PhoneNumber;
             contactOfUser.Address = contactDto.Address;
+            contactOfUser.CreatedAt = contactDto.CreatedAt;
         }
 
         await contactRepository.UpdateContactAsync(contactOfUser);
