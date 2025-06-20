@@ -1,11 +1,12 @@
 ﻿using Core.Core.Errors;
 using Core.Errors;
+using Microsoft.AspNetCore.Diagnostics;
 using System.Net;
 using System.Text.Json;
 
 namespace Server.ActionHelpers
 {
-    public class AppExceptionHandler
+    public class AppExceptionHandler : IExceptionHandler
     {
         public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
         {

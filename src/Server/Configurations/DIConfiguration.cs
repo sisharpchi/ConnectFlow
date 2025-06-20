@@ -1,3 +1,4 @@
+using Application.Helpers;
 using Application.RepositoryContracts;
 using Application.ServiceContracts;
 using Application.ServiceContracts.ServiceImplementations;
@@ -14,5 +15,10 @@ public static class DIConfiguration
         builder.Services.AddScoped<IContactRepository, ContactRepository>();
         builder.Services.AddScoped<IAuthService, AuthService>();
         builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+
+        builder.Services.AddScoped<ITokenService, TokenService>();
+        builder.Services.AddScoped<IContactService, ContactService>();
+        builder.Services.AddScoped<IRoleService, RoleService>();
+        builder.Services.AddScoped<IUserService, UserService>();
     }
 }
